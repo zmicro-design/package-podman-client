@@ -1,0 +1,70 @@
+#!/bin/bash
+
+export PACKAGE_NAME="podman"
+import "$ZMICRO_PACKAGES_PATH/$PACKAGE_NAME/config"
+import "$ZMICRO_PACKAGES_PATH/$PACKAGE_NAME/core"
+
+help() {
+  echo "Usage:"
+  echo "  zmicro podman <args ...>"
+  echo ""
+
+  podman --help
+}
+
+version() {
+  podman --version
+}
+
+setup() {
+  if [ "$(os::is_macos)" = "true" ]; then
+    log::info "start to setup podman machine ..."
+    podman machine init
+    if [ "$?" != "0" ]; then
+      log::error "failed to setup podman ."
+      return 1
+    fi
+
+    log::info "start podman machine ..."
+    podman machine start
+    if [ "$?" != "0" ]; then
+      log::error "failed to start podman ."
+      return 1
+    fi
+
+    log::success "succeed to setup podman machine ."
+  else
+    log::success "succeed to setup podman machine ."
+  fi
+}
+
+core() {
+  # context directory
+  local context="$ZMICRO_PACKAGES_DATA_PATH/podman"
+  if [ ! -d "$context" ]; then
+    mkdir -p $context
+  fi
+  cd $context
+  # context directory
+
+  case $1 in
+  -h | --help | help)
+    help
+    ;;
+  -v | --version | version)
+    version
+    ;;
+  setup)
+    setup
+    ;;
+  *)
+    podman "$@"
+    ;;
+  esac
+}
+
+run() {
+  core "$@"
+}
+
+run "$@"
