@@ -62,13 +62,13 @@ install() {
   local source_bin_file=""
   case $platform in
   darwin)
-    namex="podman-remote-release-darwin_${arch}.zip"
-    tmp_file="$namex"
+    download_name="podman-remote-release-darwin_${arch}.zip"
+    tmp_file="$download_name"
     source_bin_file="./podman-${PACKAGE_CORE_VERSION#v}/usr/bin/podman"
     ;;
   linux)
-    namex="podman-remote-static-linux_${arch}.tar.gz"
-    tmp_file="$namex"
+    download_name="podman-remote-static-linux_${arch}.tar.gz"
+    tmp_file="$download_name"
     source_bin_file="./podman-remote-static-linux_${arch}"
     ;;
   *)
